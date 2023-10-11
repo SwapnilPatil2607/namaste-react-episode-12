@@ -11,7 +11,8 @@ import Contact from "./Contact.js";
 import { ErrorElement } from "./ErrorComponent.jsx";
 import { RestaurantMenu } from "./RestaurantMenu.jsx";
 import { UserContext } from "../utils/UserContext.js";
-
+import { Provider } from "react-redux";
+import configurationStore from "../utils/useStore.js";
 const SmallBundlePage = lazy(() => import("./SmallBundlePage.jsx"));
 // this is also called
 // dynamic import
@@ -24,15 +25,18 @@ const AppLayout = () => {
   const [user, setUser] = useState("Elon musk");
   return (
     <div>
-      <Header />
-      {/* same context provider can be nested and given different values
+      <Provider store={configurationStore}>
+        <Header />
+        {/* same context provider can be nested and given different values
       and also different context provider can be nested */}
-      <UserContext.Provider value={{ user, setUser }}>
-        <Outlet />
-      </UserContext.Provider>
 
-      {/* Outlet is used to show child elements */}
-      <Footer />
+        <UserContext.Provider value={{ user, setUser }}>
+          <Outlet />
+        </UserContext.Provider>
+
+        {/* Outlet is used to show child elements */}
+        <Footer />
+      </Provider>
     </div>
   );
 };

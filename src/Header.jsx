@@ -2,23 +2,29 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useOnlineStatus } from "../utils/useOnlineStatus";
 import { UserContext } from "../utils/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { decreaseCount, increaseCount } from "../utils/slices";
 
 const Header = () => {
   const [buttonName, setButtonName] = useState("Login");
   const status = useOnlineStatus();
   const context = useContext(UserContext);
-  useEffect(() => {}, []);
 
-  // useEffect(()=>{}) called after everytime component is rendered
+  const dispatch = useDispatch();
 
-  // useEffect(()=>{},[]) called after initial render only (just once  )
-  // dependency array is not mandatory
-
-  // useEffect(()=>{},[dependency]) called after initial render + given dependency updates
-
+  // selector syntx => state => reducer passed in configure store => value
+  const count = useSelector((state) => state.countReducerInsideStore.count);
+  // using function return state so only specific state is catched instead of whole store
+  console.log(count);
   return (
     <div className="header">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqgqV9sezgYxiiPqaJ3NXXvwDbkzgXpCeBWQ&usqp=CAU" />
+
+      <div>
+        <h3> Count: {count}</h3>
+        <button onClick={() => dispatch(increaseCount())}>+</button>
+        <button onClick={() => dispatch(decreaseCount())}>-</button>
+      </div>
       <div>
         {status ? "you are online" : "you are offline"}
         <ul>
